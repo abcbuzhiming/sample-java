@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.youming.demobootoracle.mapper.SalgradeMapper">
+
+    <!-- 通用查询映射结果 -->
+    <resultMap id="BaseResultMap" type="com.youming.demobootoracle.po.Salgrade">
+        <result column="GRADE" property="grade" />
+        <result column="LOSAL" property="losal" />
+        <result column="HISAL" property="hisal" />
+    </resultMap>
+
+    <!-- 通用查询结果列 -->
+    <sql id="Base_Column_List">
+        GRADE, LOSAL, HISAL
+    </sql>
+
+</mapper>

@@ -1,0 +1,23 @@
+package com.youming.sampledrools.drools;
+
+import com.youming.sampledrools.domain.Message;
+
+//函数示例
+function void print(String messgae){
+    System.out.println(messgae);
+}
+
+
+rule "say-hi"
+    when
+        $message: Message(Message.MessageType.HI.equals(messageType) && target!=null)
+    then
+        print("hi," + $message.getTarget() + ", welcome to drools\n");
+    end
+    
+rule "say-goodbye"
+    when
+        $message: Message(Message.MessageType.GOODBYE.equals(messageType) && target!=null)
+    then
+        print("bye bye ," + $message.getTarget() + "\n");
+    end

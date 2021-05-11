@@ -1,0 +1,4 @@
+entity-packages: com.youming.sampleebeanorm.domain
+transactional-packages: com.youming.sampleebeanorm
+querybean-packages: org.example
+profile-location: true

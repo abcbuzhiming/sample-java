@@ -1,0 +1,123 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:security="http://www.springframework.org/schema/security"
+	xmlns:flex="http://www.springframework.org/schema/flex" xmlns:tx="http://www.springframework.org/schema/tx"
+	xmlns:aop="http://www.springframework.org/schema/aop" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:context="http://www.springframework.org/schema/context"
+	xsi:schemaLocation="
+	http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans.xsd
+	http://www.springframework.org/schema/context 
+	http://www.springframework.org/schema/context/spring-context.xsd
+	http://www.springframework.org/schema/aop
+	http://www.springframework.org/schema/aop/spring-aop.xsd
+	http://www.springframework.org/schema/tx
+	http://www.springframework.org/schema/tx/spring-tx.xsd
+">
+
+
+
+	<!--开启注解处理器 -->
+	<context:annotation-config />
+
+	<!-- 开启组件扫描 -->
+	<context:component-scan base-package="com.youming.demobeetlsql" />
+
+	<bean
+		class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">   <!--属性文件占位符 -->
+		<property name="locations">
+			<value>classpath:dataSource.properties</value>
+		</property>
+	</bean>
+
+	<bean id="dataSource1" class="com.mchange.v2.c3p0.ComboPooledDataSource"
+		destroy-method="close">
+		<property name="driverClass" value="${jdbc.driverClassName}" />
+		<property name="jdbcUrl" value="${jdbc.url}" />
+		<property name="user" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+		<property name="initialPoolSize" value="10" />
+		<property name="minPoolSize" value="10" />
+		<property name="maxPoolSize" value="60" />
+		<property name="acquireIncrement" value="5" />
+		<property name="maxIdleTime" value="30" />
+		<property name="maxStatements" value="200" />
+	</bean>
+
+	<!-- Druid数据源 -->
+	<bean id="dataSource2" class="com.alibaba.druid.pool.DruidDataSource"
+		init-method="init" destroy-method="close">
+		<!-- 基本属性 url、user、password -->
+		<property name="url" value="${jdbc.url}" />
+		<property name="username" value="${jdbc.username}" />
+		<property name="password" value="${jdbc.password}" />
+
+		<!-- 配置初始化大小、最小、最大 -->
+		<property name="initialSize" value="1" />
+		<property name="minIdle" value="1" />
+		<property name="maxActive" value="20" />
+
+		<!-- 配置获取连接等待超时的时间 -->
+		<property name="maxWait" value="60000" />
+
+		<!-- 配置间隔多久才进行一次检测，检测需要关闭的空闲连接，单位是毫秒 -->
+		<property name="timeBetweenEvictionRunsMillis" value="60000" />
+
+		<!-- 配置一个连接在池中最小生存的时间，单位是毫秒 -->
+		<property name="minEvictableIdleTimeMillis" value="300000" />
+
+		<property name="validationQuery" value="SELECT 'x'" />
+		<property name="testWhileIdle" value="true" />
+		<property name="testOnBorrow" value="false" />
+		<property name="testOnReturn" value="false" />
+
+		<!-- 打开PSCache，并且指定每个连接上PSCache的大小 -->
+		<property name="poolPreparedStatements" value="true" />
+		<property name="maxPoolPreparedStatementPerConnectionSize"
+			value="20" />
+
+		<!-- 配置监控统计拦截的filters，去掉后监控界面sql无法统计 -->
+		<property name="filters" value="stat" />
+	</bean>
+
+	<!-- DAO接口所在包名，Spring会自动查找其下的类 -->
+	<bean name="beetlSqlScannerConfigurer" class="org.beetl.sql.ext.spring4.BeetlSqlScannerConfigurer">
+		<!-- 哪些类可以自动注入 -->
+		<property name="basePackage" value="com.youming.demobeetlsql.mapper" />
+		<!-- 通过类后缀 来自动注入Dao -->
+		<property name="daoSuffix" value="Mapper" />
+		<property name="sqlManagerFactoryBeanName" value="sqlManagerFactoryBean" />
+	</bean>
+	<bean id="sqlManagerFactoryBean" class="org.beetl.sql.ext.spring4.SqlManagerFactoryBean">
+		<property name="cs">
+			<bean class="org.beetl.sql.ext.spring4.BeetlSqlDataSource">
+				<property name="masterSource" ref="dataSource2"></property>
+			</bean>
+		</property>
+		<property name="dbStyle">
+			<bean class="org.beetl.sql.core.db.H2Style" />
+		</property>
+		<property name="sqlLoader">
+			<bean class="org.beetl.sql.core.ClasspathLoader">
+				<property name="sqlRoot" value="/sql"></property>
+			</bean>
+		</property>
+		<property name="nc">
+			<bean class="org.beetl.sql.core.UnderlinedNameConversion" />
+		</property>
+		<property name="interceptors">
+			<list>
+				<bean class="org.beetl.sql.ext.DebugInterceptor"></bean>
+			</list>
+		</property>
+	</bean>
+	
+	<!-- 事务处理管理器 ，事务管理器指定的 DataSource 必须和用来创建 SqlSessionFactoryBean 的 是同一个数据源,否则事务管理器就无法工作了 -->
+	<bean id="transactionManager"
+		class="org.springframework.jdbc.datasource.DataSourceTransactionManager">
+		<property name="dataSource" ref="dataSource2" />
+	</bean>
+	
+	<!-- Spring 使用 BeanPostProcessor 来处理 Bean 中的标注，因此我们需要在配置文件中作如下声明来激活该后处理 Bean： -->
+	<tx:annotation-driven transaction-manager="transactionManager"/>
+</beans>

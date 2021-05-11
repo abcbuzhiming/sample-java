@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE configuration PUBLIC "-//mybatis.org//DTD Config 3.0//EN"
+"http://mybatis.org/dtd/mybatis-3-config.dtd">
+<configuration>
+    <settings>
+ 	<!-- 使用该选项时，缓存会在语句范围内被刷新，否则的话在一个session内不会被刷新 -->
+ 	<setting name="localCacheScope" value="STATEMENT"/>
+ 	</settings>
+</configuration>

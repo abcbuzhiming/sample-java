@@ -1,0 +1,12 @@
+syntax = "proto3";
+
+option java_outer_classname="StudentPB";
+
+message Student
+{
+    int32 number = 1;
+    string name = 2;
+    int32 sex = 3;
+    string hobby = 4;
+    string skill = 5;
+}

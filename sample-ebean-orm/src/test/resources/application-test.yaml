@@ -1,0 +1,19 @@
+ebean:
+  dumpMetricsOnShutdown: true
+  dumpMetricsOptions: loc,sql,hash
+
+#  dbSchema: myapp
+#  databasePlatformName: sqlserver17
+  test:
+#    useDocker: false
+#    shutdown: remove # stop | remove
+    platform: h2 # h2, postgres, mysql, oracle, sqlserver, sqlite
+    ddlMode: dropCreate # none | dropCreate | create | migration | createOnly | migrationDropCreate
+    dbName: my_app
+#    mysql:
+#      version: 8.0
+#      collation: default
+#      characterSet: utf8mb4
+
+    postgres:
+      extensions: uuid-ossp,hstore,pgcrypto

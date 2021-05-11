@@ -1,0 +1,23 @@
+
+## load external properties
+#load:
+#  properties: ${user.home}/config/my-application.properties
+
+datasource:
+  db:
+    username: exec_user
+    password: test@2020
+    url: jdbc:mysql://127.0.0.1:3306/test1?serverTimezone=GMT%2B8&useSSL=false&allowPublicKeyRetrieval=true
+    driver: com.mysql.cj.jdbc.Driver
+    dbName: test1
+
+#ebean:
+#  docstore:
+#    url: http://127.0.0.1:9200
+#    active: true
+#  migration:
+#   run: true
+
+
+
+

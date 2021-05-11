@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">  
+<title>thymeleaf范例页面</title>
+</head>
+<body>
+<p>URL表达式  @{……}：<br/>
+获取上下文路径： <span th:text=@{/}></span><br/>
+上下文路径附加其它路径： <span th:text="@{/static}"></span><br/>
+href属性：<a href="details.html" th:href="@{/order/details}">view</a><br/>
+attr设置属性：<img src="../../images/gtvglogo.png" th:attr="src=@{/images/logo.png}" /><br/>
+</p>
+<p>变量表达式${……}： <br/>
+文本赋值：<span th:text="${user.name}"></span><br/>
+内联表达式：<span>[[${user.name}]]</span><br/>
+变量拼接：<span th:text="${user.id + '  ' + user.name}"></span><br/>
+表单赋值：<input type="text" name="userName" value="James Carrot" th:value="${user.name}"></input><br/>
+非转义文本：<span th:text="${html}"></span><br/>
+转义文本：<span th:utext="${html}"></span><br/>
+select表单选择
+<select class='form-control'>
+     <option >掌握程度</option>
+     <option th:selected="${level eq '一般'}">一般</option>
+      <option th:selected="${level eq '熟练'}">熟练</option>
+      <option th:selected="${level eq '精通'}">精通</option>
+ </select>
+</p>
+<p>文字国际化表达式  #{……}：<br/>
+输出messages*.properties配置文件中的变量，根据语言环境输出不同的值：<span th:utext="#{System.title}"></span><br/><br/>
+</p>
+<p>
+条件判断：<br/>
+gt：great than（大于）&gt; <br/>
+ge：great equal（大于等于）&gt;= <br/>
+eq：equal（等于）== <br/>
+lt：less than（小于）&lt; <br/>
+le：less equal（小于等于）&lt;= <br/>
+ne：not equal（不等于）!= <br/>
+<span th:if="${price lt 100}" class="offer">Special offer!</span><br/>
+</p>
+
+<p>
+遍历list:<br/>
+<span th:each="user : ${users}">
+<span th:text="${user.id + ' ' + user.name}"></span><br/>
+</span>
+</p>
+
+<p>
+map遍历:<br/>
+<span th:each="map : ${mapData}">
+<span th:text="${map.key + ' ' + map.value}"></span><br/>
+</span>
+</p>
+<!-- 以下是js中使用内联表达式 -->
+<script type="text/javascript">
+	var name = '[[${user.name}]]';
+	name = 
+	console.log(name);
+	var jsonStr = '[(${jsonStr})]';		//如果要不转义就必须把内层的[]换成()
+	//除此之外，还有一种语法方式
+	jsonStr = [# th:utext="${jsonStr}"/];		//这种方式等同上面那种
+	console.log(jsonStr);
+</script>
+</body>
+</html>

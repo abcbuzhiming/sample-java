@@ -1,0 +1,24 @@
+server:
+#  port: 8080  #监听端口
+  context-path: /demoSecurity
+spring:
+  mvc:
+    static-path-pattern: /static/**
+  thymeleaf: 
+    prefix: classpath:/templates/
+    suffix: .html
+    mode: HTML5
+    content-type: text/html
+    encoding: UTF-8
+    cache: false    #测试的时候不要缓存，否则编辑模板不能立即起效
+    
+    
+
+logging:
+  level:
+    com:
+      youming:
+        mbaexamhelper:
+          home:
+            mapper: debug  #mybatis输出sql到debug日志,原理是调整mapper文件所在包的日志级别
+#  file: /root/logs_demo_spring_security/demo.log  #日志文件
